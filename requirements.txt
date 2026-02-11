@@ -1,0 +1,14 @@
+youtube-transcript-api
+langchain-community
+tiktoken
+python-dotenv
+fastapi
+uvicorn
+langchain
+langchain-openai
+langchain-core
+dotenv
+langchain-chroma
+requests
+pydantic
+supadata

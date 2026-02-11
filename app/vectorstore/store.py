@@ -106,7 +106,7 @@ def chunk_and_store(transcript: str, video_id: str, language: str = "en"):
                 TASK_STATUS[video_id]["progress"] = progress
                 time.sleep(0.4)
 
-            TASK_STATUS[video_id] = {"status": "completed", "progress": 100}
+            TASK_STATUS[video_id] = {"status": "completed", "progress": 100, "transcript": transcript}
             logger.info(f"✅ Video {video_id} indexed successfully at {CHROMA_PATH}")
             return documents
 

@@ -10,17 +10,24 @@ app = FastAPI(
 
 # --- CORS Configuration ---
 # This allows your Next.js frontend to communicate with this API
+# --- CORS Configuration ---
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://youtube-qa-rag-bot.vercel.app", 
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    # Option A (Secure): Use the origins list above
+    allow_origins=origins, 
+    
+    # Option B (Fastest for testing): Use ["*"] to allow all domains
+    # allow_origins=["*"], 
+    
     allow_credentials=True,
-    allow_methods=["*"],  # Allows GET, POST, OPTIONS, etc.
-    allow_headers=["*"],  # Allows headers like Content-Type
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 # ---------------------------
 

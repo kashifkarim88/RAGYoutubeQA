@@ -12,11 +12,17 @@ router = APIRouter(prefix="/transcript", tags=["Transcript"])
 @router.post("/", response_model=TranscriptResponse)
 async def fetch_transcript(video_id: str, background_tasks: BackgroundTasks):
     try:
-        # OPTIONAL: Don't re-process if already indexed in this session
-        if TASK_STATUS.get(video_id, {}).get("status") == "completed":
+        # --- LOGIC CHANGE 1: Return the stored transcript if already completed ---
+        existing_status = TASK_STATUS.get(video_id)
+        if existing_status and existing_status.get("status") == "completed":
             return JSONResponse(
                 status_code=200,
-                content={"video_id": video_id, "message": "Video already indexed. Ready for questions!"}
+                content={
+                    "video_id": video_id, 
+                    "status": "completed", # Helpful to keep status consistent
+                    "transcript": existing_status.get("transcript", ""), # Send the full saved text
+                    "message": "Video already indexed. Ready for questions!"
+                }
             )
 
         transcript = get_video_transcript(video_id)
@@ -33,7 +39,7 @@ async def fetch_transcript(video_id: str, background_tasks: BackgroundTasks):
             status_code=200,
             content={
                 "video_id": video_id,
-                "transcript": transcript[:500] + "...", # Only return a snippet to keep UI neat
+                "transcript": transcript[:500] + "...", 
                 "message": "Transcript retrieved. Processing embeddings..."
             }
         )
